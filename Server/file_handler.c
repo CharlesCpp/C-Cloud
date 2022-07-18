@@ -1,5 +1,6 @@
 #include "server.h"
 
+size_t bytes_read;
 
 size_t get_file_size(FILE *f)
 {

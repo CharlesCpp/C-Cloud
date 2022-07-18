@@ -4,6 +4,10 @@ int main(int ac, char** av) {
 
     long int file_len;
     struct stat st;
+    size_t file_size;
+    char rbuff[1024];
+    char sendbuffer[100];
+    int sfd = 0;
 
     if(ac != 2) {
         printf("[-] Error Parameters\nUsage: %s filename (Exemple: ./client image.jpg)\n", av[0]);
@@ -27,8 +31,6 @@ int main(int ac, char** av) {
     // Checking the file type
     char* f_type = check_type(av[1]);
     sleep(1);
-
-    // Writing file from write_file function
     
 
     // Create socket
@@ -37,6 +39,8 @@ int main(int ac, char** av) {
 
     // Specify an address for the socket
     struct sockaddr_in server_address;
+    memset(rbuff, '0', sizeof(rbuff));
+
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(8080);
     server_address.sin_addr.s_addr = INADDR_ANY;
@@ -56,8 +60,10 @@ int main(int ac, char** av) {
     server_socket = accept(network_socket, NULL, NULL);
     
     printf("[+] Sending the file: %s to the remote server\n", av[1]);
-    send(network_socket, &test_s, sizeof(test_s), 0);
-    printf("[+] Sent file size successfuly\n");
+    while( (file_size = fread(sendbuffer, 1, sizeof(sendbuffer), file))>0 ){
+        send(network_socket, sendbuffer, file_size, 0);
+        printf("Sent %d data to the server\n", file_size);
+    }
 
     return 0;
 }
