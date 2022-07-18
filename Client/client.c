@@ -2,6 +2,9 @@
 
 int main(int ac, char** av) {
 
+    long int file_len;
+    struct stat st;
+
     if(ac != 2) {
         printf("[-] Error Parameters\nUsage: %s filename (Exemple: ./client image.jpg)\n", av[0]);
         return 1;
@@ -10,14 +13,21 @@ int main(int ac, char** av) {
     // Opening the file
     printf("--- Cloud storage made in C by CharlesCPP ---\n");
     sleep(1);
-    FILE *file = fopen(av[1], "r");
+    FILE *file = fopen(av[1], "rb");
     if (file == NULL) {
         printf("[-] Could not open the file %s.\nClosing...", av[1]);
         return 1;
     }
 
     // Checking file length
-    length = length_file(file);
+    long int Fsize = get_length(av[1]);
+    printf("Your image is %d bytes long\n", Fsize);
+    sleep(1);
+
+    // Writing file from write_file function
+    write_file(file, Fsize);
+    fclose(file);
+
     // Create socket
     int network_socket;
     network_socket = socket(AF_INET, SOCK_STREAM, 0);

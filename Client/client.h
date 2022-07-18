@@ -6,8 +6,9 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 #include <stdint.h>
+#include <sys/stat.h>
 
-int length;
 typedef uint8_t BYTE;
 
-int length_file(FILE *file);
+long int get_length(char *filename);
+int write_file(FILE *f_write, long int size);
