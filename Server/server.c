@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <netinet/in.h>
-#include <unistd.h>
+#include "server.h"
 
 int main(int ac, char **av) {
     char message[256] = "Connected to the server";
@@ -26,7 +21,7 @@ int main(int ac, char **av) {
         
         int client_socket;
         client_socket = accept(server_socket, NULL, NULL);
-        send(client_socket, message, sizeof(message), 0);
+        recv(client_socket, &server_response, sizeof(server_response), 0);
     }
 
     close(server_socket);

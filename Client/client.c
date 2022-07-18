@@ -1,12 +1,23 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
+#include "client.h"
 
 int main(int ac, char** av) {
 
+    if(ac != 2) {
+        printf("[-] Error Parameters\nUsage: %s filename (Exemple: ./client image.jpg)\n", av[0]);
+        return 1;
+    }
+    
+    // Opening the file
+    printf("--- Cloud storage made in C by CharlesCPP ---\n");
+    sleep(1);
+    FILE *file = fopen(av[1], "r");
+    if (file == NULL) {
+        printf("[-] Could not open the file %s.\nClosing...", av[1]);
+        return 1;
+    }
+
+    // Checking file length
+    length = length_file(file);
     // Create socket
     int network_socket;
     network_socket = socket(AF_INET, SOCK_STREAM, 0);
@@ -17,6 +28,7 @@ int main(int ac, char** av) {
     server_address.sin_port = htons(8080);
     server_address.sin_addr.s_addr = INADDR_ANY;
     printf("[+] Request created successfuly \n");
+    printf("IP address is: %s\n", inet_ntoa(server_address.sin_addr));
 
     sleep(1);
     int co_status = connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address));
@@ -31,7 +43,7 @@ int main(int ac, char** av) {
 
     sleep(1);
     char server_response[256];
-    recv(network_socket, &server_response, sizeof(server_response), 0);
+    //send(client_socket, message, sizeof(message), 0);
 
     // Printing data
     printf("The server sent the data: %s\n", server_response);
