@@ -20,13 +20,16 @@ int main(int ac, char** av) {
     }
 
     // Checking file length
-    long int Fsize = get_length(av[1]);
-    printf("Your image is %d bytes long\n", Fsize);
+    size_t test_s = get_length(file);
+    printf("Your image is %d bytes long\n", get_length(file));
+    sleep(1);
+
+    // Checking the file type
+    char* f_type = check_type(av[1]);
     sleep(1);
 
     // Writing file from write_file function
-    write_file(file, Fsize);
-    fclose(file);
+    
 
     // Create socket
     int network_socket;
@@ -41,22 +44,20 @@ int main(int ac, char** av) {
     printf("IP address is: %s\n", inet_ntoa(server_address.sin_addr));
 
     sleep(1);
-    int co_status = connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address));
     // Checking if the connection is successful
-    if (co_status == -1) {
-        printf("[-] There was an error making a connection to the remote server \n\n");
-        return 1;
+    while (connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address)) == -1) {
+        printf("[-] There was an error making a connection to the remote server \nTrying again.... \n");
+        sleep(5);
     }
-    else {
-        printf("[+] Connected successfuly to the remote server \n");
-    }
+    printf("[+] Connected successfuly to the remote server \n");
 
     sleep(1);
-    char server_response[256];
-    //send(client_socket, message, sizeof(message), 0);
-
-    // Printing data
-    printf("The server sent the data: %s\n", server_response);
+    int server_socket;
+    server_socket = accept(network_socket, NULL, NULL);
+    
+    printf("[+] Sending the file: %s to the remote server\n", av[1]);
+    send(network_socket, &test_s, sizeof(test_s), 0);
+    printf("[+] Sent file size successfuly\n");
 
     return 0;
 }
