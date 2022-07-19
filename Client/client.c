@@ -69,7 +69,14 @@ int main(int ac, char** av) {
         fprintf(stdout, "\r[+] Sent %d out of %d bytes to the server", counter, file_len);
         fflush(stdout);
     }
+    printf("\n");
+    close(network_socket);
 
-    close(server_socket);
+    // Function that wait for the server to send back file link and some informations
+    char *link = Second_server();
+    printf("[+] Your link is: %s", link);
+    free(link);
+
+    
     return 0;
 }

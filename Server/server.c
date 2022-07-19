@@ -53,10 +53,16 @@ int main(int ac, char **av) {
             if (file_size < 0) perror("Receiving");
             fclose(file);
             counter = 0;
+            
+            // Function that handle to send back the file link.
+            link_back(file_name);
+            free(file_name);
+            close(server_socket);
         }
         else {
             perror("File");
         }
+
     }
 
     printf("[+] Recieved the file\n");
