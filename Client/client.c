@@ -61,6 +61,12 @@ int main(int ac, char** av) {
     printf("[+] Sent file properties (format %s)\n", f_type);
     sleep(1);
 
+    char *buffer = malloc(14);
+    recv(network_socket, buffer, 512, 0);
+    sleep(1);
+    
+    printf("\n-----\n[+] Your link is: %s\n-----\n\n", buffer);
+
     // Sending the file
     printf("[+] Sending the file: %s to the remote server\n", av[1]);
     while( (file_size = fread(sendbuffer, 1, sizeof(sendbuffer), file))>0 ){
@@ -70,13 +76,9 @@ int main(int ac, char** av) {
         fflush(stdout);
     }
     printf("\n");
-    close(network_socket);
-
-    // Function that wait for the server to send back file link and some informations
-    char *link = Second_server();
-    printf("[+] Your link is: %s", link);
-    free(link);
-
     
+    // Function that wait for the server to send back file link and some informations
+
+    close(network_socket);
     return 0;
 }

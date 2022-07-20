@@ -41,7 +41,18 @@ int main(int ac, char **av) {
         
         // Randomise a file name using the format sent by the client
         char* file_name = Create_File_Name(type);
-        printf("File name is: %s\n", file_name);
+        printf("[+] File name is: %s\n", file_name);
+
+        // Function that handle to send back the file link.
+        if ( (send(client_socket, file_name, 512, 0)) == -1) {
+            perror("Send");
+            close(server_socket);
+            exit(EXIT_FAILURE);
+        }
+        
+
+        sleep(1);
+        printf("[+] Sent files infos to the client\n"); 
 
         FILE *file = fopen(file_name, "wb");
         if (file != NULL) {
@@ -53,16 +64,13 @@ int main(int ac, char **av) {
             if (file_size < 0) perror("Receiving");
             fclose(file);
             counter = 0;
-            
-            // Function that handle to send back the file link.
-            link_back(file_name);
             free(file_name);
-            close(server_socket);
         }
         else {
             perror("File");
         }
-
+        
+    
     }
 
     printf("[+] Recieved the file\n");

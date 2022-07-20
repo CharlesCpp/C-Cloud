@@ -16,16 +16,18 @@ size_t get_file_size(FILE *f) {
 }
 
 char* Create_File_Name(char* format) {
-    long int tmp = 1;
+    char* tmp = malloc(6 + (strlen(format) * sizeof(char)));
+    int i;
     srand(time(NULL));
 
-    for (int i = 0; i < 9; i++) {
-        tmp += tmp * (rand() % 10);
+    for (i = 0; i < 5; i++) {
+        int j = 1 + rand() % 9;
+        if (j + '0' >= 48 && j + '0' <= 57) {
+            tmp[i] = j + '0';
+        }
     }
+    tmp[i + 1] = '\0';
+    strcat(tmp, format);
 
-    char* result = malloc(sizeof(tmp));
-    sprintf(result, "%d", tmp);
-    strcat(result, format);
-
-    return result;
+    return tmp;
 }
