@@ -18,14 +18,20 @@ int main(int ac, char **av) {
     server_address.sin_port = htons(8080);
     server_address.sin_addr.s_addr = INADDR_ANY;
 
+    FILE *curl;
+    curl = popen("curl -s http://ifconfig.me/", "r");
+    fflush(curl);
+
+    char* ip = malloc(99);
+    fgets(ip, 99, curl);
 
     bind(server_socket,(struct sockaddr *) &server_address, sizeof(server_address));
     printf("[+] Binding successful\n");
-    sleep(1);
 
     listen(server_socket, 100);
-    printf("[+] Listening to connections port %d\n", htons(server_address.sin_port));
-
+    printf("[+] Listening to connections ip %s port %d\n", ip, htons(server_address.sin_port));
+    free(ip);
+    
     // Receiving file type  
     while (1) {
             
@@ -50,8 +56,6 @@ int main(int ac, char **av) {
             exit(EXIT_FAILURE);
         }
         
-
-        sleep(1);
         printf("[+] Sent files infos to the client\n"); 
 
         FILE *file = fopen(file_name, "wb");

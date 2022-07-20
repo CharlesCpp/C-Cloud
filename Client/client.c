@@ -14,7 +14,7 @@ int main(int ac, char** av) {
     }
     
     // Opening the file
-    printf("\n    Remote file hosting made by CharlesCPP 'Version: 0.1'   \n\n");
+    printf("\n    Remote file hosting made by CharlesCPP   \n\n");
     sleep(1);
     FILE *file = fopen(av[1], "rb");
     if (file == NULL) {
@@ -25,11 +25,9 @@ int main(int ac, char** av) {
     // Checking file length
     size_t file_len = get_length(file);
     printf("[?] File informations: %s size: %d bytes \n", av[1], get_length(file));
-    sleep(1);
 
     // Checking the file type
     char* f_type = check_type(av[1]);
-    sleep(1);
     
 
     // Create socket
@@ -42,11 +40,10 @@ int main(int ac, char** av) {
 
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(8080);
-    server_address.sin_addr.s_addr = INADDR_ANY;
+    server_address.sin_addr.s_addr = inet_addr("217.160.175.63");
     printf("[+] Request created successfuly \n");
     printf("[+] IP address is: %s, Port: %d\n", inet_ntoa(server_address.sin_addr), htons(server_address.sin_port));
 
-    sleep(1);
     // Checking if the connection is successful
     while (connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address)) == -1) {
         printf("[-] There was an error making a connection to the remote server \nTrying again.... \n");
@@ -59,11 +56,9 @@ int main(int ac, char** av) {
     server_socket = accept(network_socket, NULL, NULL);
     send(network_socket, f_type, sizeof(f_type), 0);
     printf("[+] Sent file properties (format %s)\n", f_type);
-    sleep(1);
 
     char *buffer = malloc(14);
     recv(network_socket, buffer, 512, 0);
-    sleep(1);
     
     printf("\n-----\n[+] Your link is: %s\n-----\n\n", buffer);
 
@@ -77,7 +72,6 @@ int main(int ac, char** av) {
     }
     printf("\n");
     
-    // Function that wait for the server to send back file link and some informations
 
     close(network_socket);
     return 0;
