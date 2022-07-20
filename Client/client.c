@@ -8,6 +8,14 @@ int main(int ac, char** av) {
     char sendbuffer[1024];
     int counter = 0;
 
+    // Server informations
+
+    char* server_ip = "217.160.175.63"; // Must be ipv4
+    int server_port = 8080;
+
+    // End of server informations
+
+
     if(ac != 2) {
         printf("[-] Error Parameters\nUsage: %s filename (Exemple: ./client image.jpg)\n", av[0]);
         return 1;
@@ -15,7 +23,6 @@ int main(int ac, char** av) {
     
     // Opening the file
     printf("\n    Remote file hosting made by CharlesCPP   \n\n");
-    sleep(1);
     FILE *file = fopen(av[1], "rb");
     if (file == NULL) {
         printf("[-] Could not open the file %s.\nClosing...", av[1]);
@@ -25,6 +32,7 @@ int main(int ac, char** av) {
     // Checking file length
     size_t file_len = get_length(file);
     printf("[?] File informations: %s size: %d bytes \n", av[1], get_length(file));
+    sleep(1);
 
     // Checking the file type
     char* f_type = check_type(av[1]);
@@ -39,10 +47,10 @@ int main(int ac, char** av) {
     memset(rbuff, '0', sizeof(rbuff));
 
     server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(8080);
-    server_address.sin_addr.s_addr = inet_addr("217.160.175.63");
+    server_address.sin_port = htons(server_port);
+    server_address.sin_addr.s_addr = inet_addr(server_ip);
     printf("[+] Request created successfuly \n");
-    printf("[+] IP address is: %s, Port: %d\n", inet_ntoa(server_address.sin_addr), htons(server_address.sin_port));
+    printf("[+] IP address is: %s Port: %d\n", inet_ntoa(server_address.sin_addr), htons(server_address.sin_port));
 
     // Checking if the connection is successful
     while (connect(network_socket, (struct sockaddr *) &server_address, sizeof(server_address)) == -1) {
@@ -59,8 +67,7 @@ int main(int ac, char** av) {
 
     char *buffer = malloc(14);
     recv(network_socket, buffer, 512, 0);
-    
-    printf("\n-----\n[+] Your link is: %s\n-----\n\n", buffer);
+    linker(server_ip, buffer);
 
     // Sending the file
     printf("[+] Sending the file: %s to the remote server\n", av[1]);
@@ -72,7 +79,7 @@ int main(int ac, char** av) {
     }
     printf("\n");
     
-
+    printf("[+] Closing with no errors\n");
     close(network_socket);
     return 0;
 }

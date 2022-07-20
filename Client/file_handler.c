@@ -50,3 +50,17 @@ int write_file(FILE *f_write, char* filename) {
     fclose(img);
     return 1;
 }
+
+void linker(char* ip, char* buffer) {
+    char result[500];
+    char* tmp = "http://";
+    char* slash = "/";
+
+    strcat(result, tmp);
+    strcat(result, ip);
+    strcat(result, slash);
+    strcat(result, buffer);
+    
+    printf("\n-----\n[+] Your link is: %s\n-----\n\n", result);
+    return;
+}

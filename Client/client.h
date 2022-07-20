@@ -15,3 +15,4 @@ size_t get_length(FILE *f);
 int write_file(FILE *f_write, char* filename);
 char* check_type(char* filename);
 char* Second_server();
+void linker(char* ip, char* buffer);
