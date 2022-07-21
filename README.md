@@ -27,7 +27,7 @@ Client side: Download 'Client' files
 ```
 ## Deployment
 
-To deploy Server
+To deploy Server move the ./server application to your var/www/html directory then
 
 ```bash
   install screen on your server (Debian : apt install screen) (Centos : yum install screen)
