@@ -10,7 +10,7 @@ int main(int ac, char** av) {
 
     // Server informations
 
-    char* server_ip = "217.160.175.63"; // Must be ipv4
+    char* server_ip = "0.0.0.0"; // Must be ipv4
     int server_port = 8080;
 
     // End of server informations
