@@ -77,6 +77,7 @@ int main(int ac, char **av) {
     
     }
 
+    // End of server socket
     printf("[+] Recieved the file\n");
     free(type);
     close(server_socket);
